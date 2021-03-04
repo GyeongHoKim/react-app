@@ -39,29 +39,37 @@ class App extends Component {
 			_article = <ReadContent title={_title} desc={_desc} />;
 		} else if (this.state.mode === 'read') {
 			let _content = this.getReadContent();
-			_article = <ReadContent title={_content._title} desc={_content._desc} />;
+			_article = <ReadContent title={_content.title} desc={_content.desc} />;
 		} else if (this.state.mode === 'create') {
 			_article = <CreateContent onSubmit={(_title, _desc) => {
 						//add content to this.state.contents
 						this.max_content_id = this.max_content_id + 1;
 						var newContents = Array.from(this.state.contents);
-						newContents.push({id:this.max_content_id, title:_title, desc:_desc});
-						this.setState({
-							contents:newContents
+						newContents.push({
+							id:this.max_content_id,
+							title:_title,
+							desc:_desc
 						});
-						console.log(_title, _desc);
+						this.setState({
+							contents:newContents,
+							mode:'read',
+							selected_content_id:this.max_content_id
+						});
 					}}/>;
 		} else if (this.state.mode === 'update') {
 			let _content = this.getReadContent();
-			_article = <UpdateContent data={_content} onSubmit={(_title, _desc) => {
-						//add content to this.state.contents
-						this.max_content_id = this.max_content_id + 1;
-						var newContents = Array.from(this.state.contents);
-						newContents.push({id:this.max_content_id, title:_title, desc:_desc});
+			_article = <UpdateContent data={_content} onSubmit={(_id, _title, _desc) => {
+						var _contents = Array.from(this.state.contents);
+						for (let i = 0; i < _contents.length; ++i) {
+							if(_contents[i].id === _id) {
+								_contents[i] = {id:_id, title:_title, desc:_desc};
+								break;
+							}
+						}
 						this.setState({
-							contents:newContents
+							contents:_contents,
+							mode:'read'
 						});
-						console.log(_title, _desc);
 					}}/>;
 		}
 		return _article;
