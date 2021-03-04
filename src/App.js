@@ -9,6 +9,7 @@ import './App.css';
 class App extends Component {
 	constructor(props) {
 		super(props);
+		this.max_content_id = 3;//UI에 관계없으므로 state로 하지 않음
 		this.state = {
 			mode: 'create',
 			selected_content_id: 2,
@@ -40,6 +41,13 @@ class App extends Component {
 		} else if (this.state.mode === 'create') {
 			_article = <CreateContent onSubmit={(_title, _desc) => {
 						//add content to this.state.contents
+						this.max_content_id = this.max_content_id + 1;
+						var _contents = this.state.contents.concat(
+							{id:this.max_content_id, title:_title, desc:_desc}
+						);
+						this.setState({
+							contents:_contents
+						});
 						console.log(_title, _desc);
 					}}/>;
 		}
