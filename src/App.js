@@ -12,7 +12,7 @@ class App extends Component {
 		super(props);
 		this.max_content_id = 3;//UI에 관계없으므로 state로 하지 않음
 		this.state = {
-			mode: 'create',
+			mode: 'welcome',
 			selected_content_id: 2,
 			welcome:{title:'Welcome', desc:'Hello, React!'},
 			subject: {title: "WEB", sub: "World Wide Web!"},
@@ -94,9 +94,26 @@ class App extends Component {
 					data={this.state.contents}
 				/>
 				<Control onChangeMode={(_mode) => {
-						this.setState({
-							mode: _mode
-						});
+						if (_mode === 'delete') {
+							if(window.confirm('Really?')) {
+								let _contents = Array.from(this.state.contents);
+								for (let i = 0; i < _contents.length; ++i) {
+									if(_contents[i].id === this.state.selected_content_id) {
+										_contents.splice(i, 1);
+										break;
+									}
+								}
+									this.setState({
+										mode:'welcome',
+										contents:_contents
+									});
+									alert('deleted');
+							}
+						} else {
+							this.setState({
+								mode: _mode
+							});
+						}
 					}} />
 				{this.getContent()}
 			</div>
